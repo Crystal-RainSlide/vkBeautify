@@ -24,7 +24,9 @@
 *        vkbeautify.xmlmin(text [,preserve_comments]);
 *        vkbeautify.jsonmin(text);
 *        vkbeautify.cssmin(text [,preserve_comments]);
+*        vkbeautify.minify(type, text [,preserve_comments]);
 *
+*        @type - String; can be "xml", "json" or "css";
 *        @text - String; text to minify;
 *        @preserve_comments - Bool; [optional];
 *                Set this flag to true to prevent removing comments from @text ( minxml and mincss functions only. )
@@ -34,9 +36,15 @@
 *        vkbeautify.json(text, 4 );       // pretty print JSON
 *        vkbeautify.css(text, '. . . .'); // pretty print CSS
 *
-*        vkbeautify.xmlmin(text, true); // minify XML, preserve comments
-*        vkbeautify.jsonmin(text);      // minify JSON
-*        vkbeautify.cssmin(text);       // minify CSS, remove comments ( default )
+*        vkbeautify.xmlmin(text, true);      // minify XML, preserve comments
+*        vkbeautify.jsonmin(text);           // minify JSON
+*        vkbeautify.cssmin(text);            // minify CSS, remove comments ( default )
+*
+*        // pretty print XML or JSON using inline judgement: (isXML ? "xml" : "json")
+*        vkbeautify[ (isXML ? "xml" : "json") ](text, "\t");
+*
+*        // minify XML or JSON using the same inline judgement: (isXML ? "xml" : "json")
+*        vkbeautify.minify((isXML ? "xml" : "json"), text, false); 
 *
 */
 
@@ -275,6 +283,12 @@ vkbeautify.prototype.cssmin = function(text, preserveComments) {
 	          .replace(/\; /g, ";")
 	          .replace(/\/\* /g, "/*")
 	          .replace(/\*\/ /g, "*/");
+}
+
+vkbeautify.prototype.minify = function (type, ...arg) {
+	if (/^(?:xml|json|css)$/.test(type)) {
+		return vkbeautify.prototype[type + "min"](...arg)
+	}
 }
 
 window.vkbeautify = new vkbeautify();

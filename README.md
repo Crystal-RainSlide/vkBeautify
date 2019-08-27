@@ -3,7 +3,10 @@
 javascript  plugin to **pretty-print** or **minify**
 text in **XML**, **JSON**, **CSS** and **SQL** formats.
 
-**Version**: 0.98.00.beta
+This fork split **SQL** out to fit the most use case:
+SQL tools is not related to XML, JSON or CSS and vice versa.
+
+**Version**: 0.99.00.beta
 
 **Copyright**: (c) 2012 Vadim Kiryukhin ( vkiryukhin @ gmail.com )
 
@@ -31,20 +34,26 @@ vkbeautify.xmlmin(text [,preserve_comments]);
 vkbeautify.jsonmin(text);
 vkbeautify.cssmin(text [,preserve_comments]);
 vkbeautify.sqlmin(text);
+vkbeautify.minify(type, text [,preserve_comments]);
 
+@type - String; can be "xml", "json" or "css";
 @text - String; text to minify;
 @preserve_comments - Bool; [optional];
     Set this flag to true to prevent removing comments from @text ( minxml and mincss functions only. )
 ```
 **Examples**
 ```
-vkbeautify.xml(text); // pretty print XML
-vkbeautify.json(text, 4 ); // pretty print JSON
+vkbeautify.xml(text);            // pretty print XML
+vkbeautify.json(text, 4 );       // pretty print JSON
 vkbeautify.css(text, '. . . .'); // pretty print CSS
-vkbeautify.sql(text, '----'); // pretty print SQL
 
-vkbeautify.xmlmin(text, true);// minify XML, preserve comments
-vkbeautify.jsonmin(text);// minify JSON
-vkbeautify.cssmin(text);// minify CSS, remove comments ( default )
-vkbeautify.sqlmin(text);// minify SQL
+vkbeautify.xmlmin(text, true);      // minify XML, preserve comments
+vkbeautify.jsonmin(text);           // minify JSON
+vkbeautify.cssmin(text);            // minify CSS, remove comments ( default )
+
+// pretty print XML or JSON using inline judgement: (isXML ? "xml" : "json")
+vkbeautify[ (isXML ? "xml" : "json") ](text, "\t");
+
+// minify XML or JSON using the same inline judgement: (isXML ? "xml" : "json")
+vkbeautify.minify((isXML ? "xml" : "json"), text, false); 
 ```
